@@ -25,20 +25,53 @@ namespace addressbooktests
         [Test]
         public void NewGroupTest()
         {
+            OpenHomePage();
+            Login(new AccountData("admin", "secret"));
+            GoToGroupsPage();
+            InitNewGroup();
+            GroupData group = new GroupData("aaa");
+            group.Header = "sss";
+            group.Footer = "ddd";
+            FillGroupForm(group);
+            SubmitGroupForm();
+            GoToGroupsPage();
+        }
+
+        private void SubmitGroupForm()
+        {
+            driver.FindElement(By.Name("submit")).Click();
+        }
+
+        private void FillGroupForm(GroupData group)
+        {
+            driver.FindElement(By.Name("group_name")).Click();
+            driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
+            driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
+            driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
+        }
+
+        private void InitNewGroup()
+        {
+            driver.FindElement(By.Name("new")).Click();
+        }
+
+        private void GoToGroupsPage()
+        {
+            driver.FindElement(By.LinkText("groups")).Click();
+        }
+
+        private void OpenHomePage()
+        {
             driver.Navigate().GoToUrl("http://localhost/addressbook/");
+        }
+
+        private void Login(AccountData accountData)
+        {
             driver.Manage().Window.Size = new System.Drawing.Size(1920, 1036);
             driver.FindElement(By.Name("user")).Click();
-            driver.FindElement(By.Name("user")).SendKeys("admin");
-            driver.FindElement(By.Name("pass")).SendKeys("secret");
+            driver.FindElement(By.Name("user")).SendKeys(accountData.Username);
+            driver.FindElement(By.Name("pass")).SendKeys(accountData.Password);
             driver.FindElement(By.CssSelector("input:nth-child(7)")).Click();
-            driver.FindElement(By.LinkText("groups")).Click();
-            driver.FindElement(By.Name("new")).Click();
-            driver.FindElement(By.Name("group_name")).Click();
-            driver.FindElement(By.Name("group_name")).SendKeys("q");
-            driver.FindElement(By.Name("group_header")).SendKeys("q");
-            driver.FindElement(By.Name("group_footer")).SendKeys("q");
-            driver.FindElement(By.Name("submit")).Click();
-            driver.FindElement(By.LinkText("groups")).Click();
         }
     }
 }
