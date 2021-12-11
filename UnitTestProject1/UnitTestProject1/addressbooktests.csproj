@@ -62,11 +62,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountData.cs" />
+    <Compile Include="ApplicationManager.cs" />
     <Compile Include="ContactData.cs" />
+    <Compile Include="ContactHelper.cs" />
     <Compile Include="ContactTests.cs" />
     <Compile Include="GroupData.cs" />
+    <Compile Include="GroupHelper.cs" />
     <Compile Include="GroupTests.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="HelperBase.cs" />
+    <Compile Include="LoginHelper.cs" />
+    <Compile Include="NavigationHelper.cs" />
+    <Compile Include="TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
