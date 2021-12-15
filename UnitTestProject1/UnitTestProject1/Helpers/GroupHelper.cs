@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using System;
 
 namespace addressbooktests
 {
@@ -13,6 +14,17 @@ namespace addressbooktests
             FillGroupForm(group);
             SubmitGroupForm();
         }
+        internal void EditGroup(int groupNumber, GroupData group)
+        {
+            InitGroupEdit(groupNumber);
+            FillGroupForm(group);
+            SubmitGroupEdit();
+        }
+        internal void RemoveGroup(int groupNumber)
+        {
+            application.driver.FindElement(By.XPath($"//div[@id='content']/form/span[{groupNumber}]/input")).Click();
+            application.driver.FindElement(By.Name("delete")).Click();
+        }
         private void SubmitGroupForm()
         {
             application.driver.FindElement(By.Name("submit")).Click();
@@ -24,6 +36,18 @@ namespace addressbooktests
             application.driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
             application.driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
             application.driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
+        }
+
+
+        private void SubmitGroupEdit()
+        {
+            application.driver.FindElement(By.Name("update")).Click();
+        }
+
+        private void InitGroupEdit(int groupNumber)
+        {
+            application.driver.FindElement(By.XPath($"//div[@id='content']/form/span[{groupNumber}]/input")).Click();
+            application.driver.FindElement(By.Name("edit")).Click();
         }
 
         private void InitNewGroup()

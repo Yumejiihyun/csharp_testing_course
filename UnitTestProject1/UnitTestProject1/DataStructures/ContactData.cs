@@ -17,6 +17,16 @@
         public ContactData(string nickName)
         {
             this.nickName = nickName;
+
+            firstName = string.Empty;
+            middleName = string.Empty;
+            lastName = string.Empty;
+            title = string.Empty;
+            company = string.Empty;
+            address = string.Empty;
+            home = string.Empty;
+            mobile = string.Empty;
+            email = string.Empty;
         }
 
         public ContactData(string firstName, string middleName, string lastName)

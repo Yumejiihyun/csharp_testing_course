@@ -16,6 +16,10 @@ namespace addressbooktests
         {
             application.driver.FindElement(By.LinkText("add new")).Click();
         }
+        public void GoToEditContact(int contactNumber)
+        {
+            application.driver.FindElement(By.XPath($"(//img[@alt='Edit'])[{contactNumber}]")).Click();
+        }
         public void ReturnToHomePage()
         {
             application.driver.FindElement(By.LinkText("home page")).Click();

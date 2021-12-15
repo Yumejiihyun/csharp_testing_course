@@ -61,18 +61,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountData.cs" />
-    <Compile Include="ApplicationManager.cs" />
-    <Compile Include="ContactData.cs" />
-    <Compile Include="ContactHelper.cs" />
-    <Compile Include="ContactTests.cs" />
-    <Compile Include="GroupData.cs" />
-    <Compile Include="GroupHelper.cs" />
-    <Compile Include="GroupTests.cs" />
-    <Compile Include="HelperBase.cs" />
-    <Compile Include="LoginHelper.cs" />
-    <Compile Include="NavigationHelper.cs" />
-    <Compile Include="TestBase.cs" />
+    <Compile Include="DataStructures\AccountData.cs" />
+    <Compile Include="Helpers\ApplicationManager.cs" />
+    <Compile Include="DataStructures\ContactData.cs" />
+    <Compile Include="Helpers\ContactHelper.cs" />
+    <Compile Include="Tests\ContactTests.cs" />
+    <Compile Include="DataStructures\GroupData.cs" />
+    <Compile Include="Helpers\GroupHelper.cs" />
+    <Compile Include="Tests\GroupTests.cs" />
+    <Compile Include="Helpers\HelperBase.cs" />
+    <Compile Include="Helpers\LoginHelper.cs" />
+    <Compile Include="Helpers\NavigationHelper.cs" />
+    <Compile Include="Tests\TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

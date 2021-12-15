@@ -30,5 +30,23 @@ namespace addressbooktests
                 return contact;
             }
         }
+        [Test]
+        public void EditContactTest()
+        {
+            app.NavigationHelper.GoToEditContact(1);
+            app.ContactHelper.FillContactForm(new ContactData("Barantsev"));
+            app.ContactHelper.ConfirmUpdatingContact();
+            app.NavigationHelper.ReturnToHomePage();
+        }
+        [Test]
+        public void RemoveContactFromHomePageTest()
+        {
+            app.ContactHelper.DeleteContactFromHomePage(1);
+        }
+        [Test]
+        public void RemoveContactFromEditPageTest()
+        {
+            app.ContactHelper.DeleteContactFromEditPage(1);
+        }
     }
 }
