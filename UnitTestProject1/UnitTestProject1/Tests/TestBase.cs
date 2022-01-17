@@ -6,15 +6,22 @@ namespace addressbooktests
     {
         protected ApplicationManager app;
         [SetUp]
-        public void SetUp()
+        public virtual void SetUp()
         {
-            app = new ApplicationManager();
+            app = ApplicationManager.GetInstance();
             app.LoginAsAdmin();
         }
+
         [TearDown]
-        protected void TearDown()
+        public void TearDown() => app.LoginHelper.OpenHomePage();
+    }
+
+    public class LoginTestBase : TestBase
+    {
+        [SetUp]
+        public override void SetUp()
         {
-            app.Close();
+            app = ApplicationManager.GetInstance();
         }
     }
 }

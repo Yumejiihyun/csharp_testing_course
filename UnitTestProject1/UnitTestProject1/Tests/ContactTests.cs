@@ -12,7 +12,7 @@ namespace addressbooktests
             ContactData vanya = CreateVanya777();
             app.ContactHelper.FillContactForm(vanya);
             app.ContactHelper.ConfirmAddingNewContact();
-            app.NavigationHelper.ReturnToHomePage();
+            app.NavigationHelper.GoToHomePage();
 
             ContactData CreateVanya777()
             {
@@ -33,19 +33,37 @@ namespace addressbooktests
         [Test]
         public void EditContactTest()
         {
+            if(!app.NavigationHelper.IsContactPresent())
+            {
+                app.NavigationHelper.GoToNewContact();
+                app.ContactHelper.ConfirmAddingNewContact();
+                app.NavigationHelper.GoToHomePage();
+            }
             app.NavigationHelper.GoToEditContact(1);
             app.ContactHelper.FillContactForm(new ContactData("Barantsev"));
             app.ContactHelper.ConfirmUpdatingContact();
-            app.NavigationHelper.ReturnToHomePage();
+            app.NavigationHelper.GoToHomePage();
         }
         [Test]
         public void RemoveContactFromHomePageTest()
         {
+            if (!app.NavigationHelper.IsContactPresent())
+            {
+                app.NavigationHelper.GoToNewContact();
+                app.ContactHelper.ConfirmAddingNewContact();
+                app.NavigationHelper.GoToHomePage();
+            }
             app.ContactHelper.DeleteContactFromHomePage(1);
         }
         [Test]
         public void RemoveContactFromEditPageTest()
         {
+            if (!app.NavigationHelper.IsContactPresent())
+            {
+                app.NavigationHelper.GoToNewContact();
+                app.ContactHelper.ConfirmAddingNewContact();
+                app.NavigationHelper.GoToHomePage();
+            }
             app.ContactHelper.DeleteContactFromEditPage(1);
         }
     }

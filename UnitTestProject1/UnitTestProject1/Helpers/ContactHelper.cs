@@ -10,16 +10,16 @@ namespace addressbooktests
         }
         public void FillContactForm(ContactData contact)
         {
-            application.driver.FindElement(By.Name("firstname")).SendKeys(contact.FirstName);
-            application.driver.FindElement(By.Name("middlename")).SendKeys(contact.MiddleName);
-            application.driver.FindElement(By.Name("lastname")).SendKeys(contact.LastName);
-            application.driver.FindElement(By.Name("nickname")).SendKeys(contact.NickName);
-            application.driver.FindElement(By.Name("title")).SendKeys(contact.Title);
-            application.driver.FindElement(By.Name("company")).SendKeys(contact.Company);
-            application.driver.FindElement(By.Name("address")).SendKeys(contact.Address);
-            application.driver.FindElement(By.Name("home")).SendKeys(contact.Home);
-            application.driver.FindElement(By.Name("mobile")).SendKeys(contact.Mobile);
-            application.driver.FindElement(By.Name("email")).SendKeys(contact.Email);
+            Type(By.Name("firstname"), contact.FirstName);
+            Type(By.Name("middlename"), contact.MiddleName);
+            Type(By.Name("lastname"), contact.LastName);
+            Type(By.Name("nickname"), contact.NickName);
+            Type(By.Name("title"), contact.Title);
+            Type(By.Name("company"), contact.Company);
+            Type(By.Name("address"), contact.Address);
+            Type(By.Name("home"), contact.Home);
+            Type(By.Name("mobile"), contact.Mobile);
+            Type(By.Name("email"), contact.Email);
             if (contact.Bday != null) { FillBirthData(); }
 
             void FillBirthData()

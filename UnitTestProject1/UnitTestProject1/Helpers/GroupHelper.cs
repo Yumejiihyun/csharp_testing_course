@@ -32,12 +32,10 @@ namespace addressbooktests
 
         private void FillGroupForm(GroupData group)
         {
-            application.driver.FindElement(By.Name("group_name")).Click();
-            application.driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
-            application.driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
-            application.driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
+            Type(By.Name("group_name"), group.Name);
+            Type(By.Name("group_header"), group.Header);
+            Type(By.Name("group_footer"), group.Footer);
         }
-
 
         private void SubmitGroupEdit()
         {

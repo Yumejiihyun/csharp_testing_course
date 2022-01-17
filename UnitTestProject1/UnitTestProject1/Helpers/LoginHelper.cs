@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using System;
 
 namespace addressbooktests
 {
@@ -15,12 +16,36 @@ namespace addressbooktests
         }
         public LoginHelper Login(AccountData accountData)
         {
-            application.driver.Manage().Window.Size = new System.Drawing.Size(1920, 1036);
-            application.driver.FindElement(By.Name("user")).Click();
-            application.driver.FindElement(By.Name("user")).SendKeys(accountData.Username);
-            application.driver.FindElement(By.Name("pass")).SendKeys(accountData.Password);
+            if(IsLoggedIn())
+            {
+                if(IsLoggedIn(accountData))
+                {
+                    return this;
+                }
+
+                LogOut();
+            }
+            Type(By.Name("user"), accountData.Username);
+            Type(By.Name("pass"), accountData.Password);
             application.driver.FindElement(By.CssSelector("input:nth-child(7)")).Click();
             return this;
+        }
+
+        public bool IsLoggedIn()
+        {
+            return IsElementPresent(By.Name("logout"));
+        }
+
+        public void LogOut()
+        {
+            if(IsLoggedIn()) application.driver.FindElement(By.LinkText("Logout")).Click();
+        }
+
+        public bool IsLoggedIn(AccountData accountData)
+        {
+            return IsLoggedIn() 
+                && application.driver.FindElement(By.Name("logout")).FindElement(By.TagName("b")).Text 
+                == "(" + accountData.Username + ")";
         }
     }
 }

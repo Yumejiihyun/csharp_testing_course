@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
+using System.Threading;
 using NUnit.Framework;
 
 namespace addressbooktests
@@ -8,6 +9,7 @@ namespace addressbooktests
     {
         public IWebDriver driver;
         private AccountData admin = new AccountData("admin", "secret");
+        private static ThreadLocal<ApplicationManager> app = new ThreadLocal<ApplicationManager>();
 
         public ApplicationManager()
         {
@@ -18,11 +20,22 @@ namespace addressbooktests
             NavigationHelper = new NavigationHelper(this);
         }
 
+        ~ApplicationManager() => driver.Close();
+
+        public static ApplicationManager GetInstance()
+        {
+            if (!app.IsValueCreated)
+            {
+                app.Value = new ApplicationManager();
+                app.Value.LoginHelper.OpenHomePage();
+            }
+            return app.Value;
+        }
+
         public GroupHelper GroupHelper { get; set; }
         public ContactHelper ContactHelper { get; set; }
         public LoginHelper LoginHelper { get; set; }
         public NavigationHelper NavigationHelper { get; set; }
         public void LoginAsAdmin() => LoginHelper.OpenHomePage().Login(admin);
-        public void Close() => driver.Close();
     }
 }
