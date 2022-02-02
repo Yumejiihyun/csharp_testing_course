@@ -20,8 +20,6 @@ namespace addressbooktests
             NavigationHelper = new NavigationHelper(this);
         }
 
-        ~ApplicationManager() => driver.Close();
-
         public static ApplicationManager GetInstance()
         {
             if (!app.IsValueCreated)

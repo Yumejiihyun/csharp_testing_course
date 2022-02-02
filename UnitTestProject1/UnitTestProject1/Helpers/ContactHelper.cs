@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using System;
+using System.Collections.Generic;
+using OpenQA.Selenium;
 
 namespace addressbooktests
 {
@@ -38,6 +40,21 @@ namespace addressbooktests
                 application.driver.FindElement(By.Name("byear")).SendKeys(contact.Bday[2]);
             }
         }
+
+        internal List<ContactData> GetContactList()
+        {
+            List<ContactData> contactList = new List<ContactData>();
+            var elements = application.driver.FindElements(By.XPath("//tr[position()>1]"));
+            //*[@id="maintable"]/tbody/tr[1]/th[1]
+            foreach (var element in elements)
+            {
+                var lastName = element.FindElement(By.XPath("td[2]"));
+                var firstName = element.FindElement(By.XPath("td[3]"));
+                contactList.Add(new ContactData(firstName.Text, lastName.Text));
+            }
+            return contactList;
+        }
+
         public void ConfirmAddingNewContact()
         {
             application.driver.FindElement(By.CssSelector("input:nth-child(87)")).Click();
@@ -51,11 +68,13 @@ namespace addressbooktests
             application.driver.FindElement(By.XPath($"//tr[{contactNumber + 1}]/td/input")).Click();
             application.driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             application.driver.SwitchTo().Alert().Accept();
+            application.NavigationHelper.GoToHomePage();
         }
         public void DeleteContactFromEditPage(int contactNumber)
         {
             application.NavigationHelper.GoToEditContact(contactNumber);
             application.driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            application.NavigationHelper.GoToHomePage();
         }
     }
 }

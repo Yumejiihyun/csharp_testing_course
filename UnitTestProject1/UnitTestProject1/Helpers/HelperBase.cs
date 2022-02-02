@@ -13,7 +13,11 @@ namespace addressbooktests
 
         protected void Type(By locator, string text)
         {
-            if (text != null) application.driver.FindElement(locator).SendKeys(text);
+            if (text != null)
+            {
+                application.driver.FindElement(locator).Clear();
+                application.driver.FindElement(locator).SendKeys(text);
+            }
         }
 
         public bool IsElementPresent(By by)

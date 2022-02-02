@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using System;
+using System.Collections.Generic;
 
 namespace addressbooktests
 {
@@ -20,6 +21,18 @@ namespace addressbooktests
             FillGroupForm(group);
             SubmitGroupEdit();
         }
+
+        internal List<GroupData> GetGroupList()
+        {
+            List<GroupData> groupList = new List<GroupData>();
+            var elements = application.driver.FindElements(By.CssSelector("span.group"));
+            foreach(var element in elements)
+            {
+                groupList.Add(new GroupData(element.Text));
+            }
+            return groupList;
+        }
+
         internal void RemoveGroup(int groupNumber)
         {
             application.driver.FindElement(By.XPath($"//div[@id='content']/form/span[{groupNumber}]/input")).Click();
