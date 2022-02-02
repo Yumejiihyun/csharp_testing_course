@@ -24,17 +24,19 @@ namespace addressbooktests
 
             ContactData CreateVanya777()
             {
-                ContactData contact = new ContactData("Vanya777");
-                contact.FirstName = "Ivan";
-                contact.MiddleName = "Ivanovich";
-                contact.LastName = "Ivanov";
-                contact.Title = "Software Engineer";
-                contact.Company = "Emerson";
-                contact.Address = "St. Petersburg";
-                contact.Home = "St. Petersburg";
-                contact.Mobile = "777777";
-                contact.Email = "Ivanov@mail.ru";
-                contact.Bday = new string[] { "7", "July", "1907" };
+                ContactData contact = new ContactData("Vanya777")
+                {
+                    FirstName = "Ivan",
+                    MiddleName = "Ivanovich",
+                    LastName = "Ivanov",
+                    Title = "Software Engineer",
+                    Company = "Emerson",
+                    Address = "St. Petersburg",
+                    Home = "St. Petersburg",
+                    Mobile = "777777",
+                    Email = "Ivanov@mail.ru",
+                    Bday = new string[] { "7", "July", "1907" }
+                };
                 return contact;
             }
         }

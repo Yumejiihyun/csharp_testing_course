@@ -8,8 +8,8 @@ namespace addressbooktests
     public class ApplicationManager
     {
         public IWebDriver driver;
-        private AccountData admin = new AccountData("admin", "secret");
-        private static ThreadLocal<ApplicationManager> app = new ThreadLocal<ApplicationManager>();
+        private readonly AccountData admin = new AccountData("admin", "secret");
+        private static readonly ThreadLocal<ApplicationManager> app = new ThreadLocal<ApplicationManager>();
 
         public ApplicationManager()
         {

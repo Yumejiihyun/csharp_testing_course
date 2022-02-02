@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenQA.Selenium;
+using System.Linq;
 
 namespace addressbooktests
 {
@@ -49,12 +50,10 @@ namespace addressbooktests
             {
                 contactListCash = new List<ContactData>();
                 var elements = application.driver.FindElements(By.XPath("//tr[position()>1]"));
-                foreach (var element in elements)
-                {
-                    var lastName = element.FindElement(By.XPath("td[2]"));
-                    var firstName = element.FindElement(By.XPath("td[3]"));
-                    contactListCash.Add(new ContactData(firstName.Text, lastName.Text));
-                }
+                contactListCash.AddRange(from element in elements
+                                         let lastName = element.FindElement(By.XPath("td[2]"))
+                                         let firstName = element.FindElement(By.XPath("td[3]"))
+                                         select new ContactData(firstName.Text, lastName.Text));
             }
             return contactListCash;
         }
