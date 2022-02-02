@@ -22,25 +22,41 @@ namespace addressbooktests
             SubmitGroupEdit();
         }
 
+        internal int GetGroupCount()
+        {
+            return application.driver.FindElements(By.CssSelector("span.group")).Count;
+        }
+
+        private List<GroupData> groupListCash = null;
+
         internal List<GroupData> GetGroupList()
         {
-            List<GroupData> groupList = new List<GroupData>();
-            var elements = application.driver.FindElements(By.CssSelector("span.group"));
-            foreach(var element in elements)
+            if (groupListCash is null)
             {
-                groupList.Add(new GroupData(element.Text));
+                groupListCash = new List<GroupData>();
+                var elements = application.driver.FindElements(By.CssSelector("span.group"));
+                foreach(var element in elements)
+                {
+                    var id = element.FindElement(By.TagName("input")).GetAttribute("value");
+                    groupListCash.Add(new GroupData(element.Text)
+                    {
+                        Id = id,
+                    });
+                }
             }
-            return groupList;
+            return new List<GroupData>(groupListCash);
         }
 
         internal void RemoveGroup(int groupNumber)
         {
             application.driver.FindElement(By.XPath($"//div[@id='content']/form/span[{groupNumber}]/input")).Click();
             application.driver.FindElement(By.Name("delete")).Click();
+            groupListCash = null;
         }
         private void SubmitGroupForm()
         {
             application.driver.FindElement(By.Name("submit")).Click();
+            groupListCash = null;
         }
 
         private void FillGroupForm(GroupData group)
@@ -53,6 +69,7 @@ namespace addressbooktests
         private void SubmitGroupEdit()
         {
             application.driver.FindElement(By.Name("update")).Click();
+            groupListCash = null;
         }
 
         private void InitGroupEdit(int groupNumber)

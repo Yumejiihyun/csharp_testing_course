@@ -17,6 +17,9 @@ namespace addressbooktests
             app.GroupHelper.CreateNewGroup(group);
             app.NavigationHelper.GoToGroupsPage();
 
+            int count = app.GroupHelper.GetGroupCount();
+            Assert.AreEqual(oldGroupList.Count + 1, count);
+
             oldGroupList.Add(group);
             List<GroupData> newGroupList = app.GroupHelper.GetGroupList();
             newGroupList.Sort();
@@ -39,6 +42,9 @@ namespace addressbooktests
             GroupData group = Create();
             app.GroupHelper.CreateNewGroup(group);
             app.NavigationHelper.GoToGroupsPage();
+
+            int count = app.GroupHelper.GetGroupCount();
+            Assert.AreEqual(oldGroupList.Count, count);
 
             List<GroupData> newGroupList = app.GroupHelper.GetGroupList();
             Assert.AreEqual(oldGroupList, newGroupList);
@@ -64,10 +70,18 @@ namespace addressbooktests
             app.GroupHelper.RemoveGroup(1);
             app.NavigationHelper.GoToGroupsPage();
 
-            oldGroupList.RemoveAt(0);
-            List<GroupData> newGroupList = app.GroupHelper.GetGroupList();
-            Assert.AreEqual(oldGroupList, newGroupList);
+            int count = app.GroupHelper.GetGroupCount();
+            Assert.AreEqual(oldGroupList.Count - 1, count);
 
+            List<GroupData> newGroupList = app.GroupHelper.GetGroupList();
+
+            foreach (GroupData group in newGroupList)
+            {
+                Assert.AreNotEqual(group.Id, oldGroupList[0].Id);
+            }
+
+            oldGroupList.RemoveAt(0);
+            Assert.AreEqual(oldGroupList, newGroupList);            
         }
         [Test]
         public void EditGroupTest()
@@ -79,9 +93,14 @@ namespace addressbooktests
                 app.NavigationHelper.GoToGroupsPage();
             }
             List<GroupData> oldGroupList = app.GroupHelper.GetGroupList();
+            GroupData oldData = oldGroupList[0];
             GroupData group = Create();
             app.GroupHelper.EditGroup(1, group);
             app.NavigationHelper.GoToGroupsPage();
+
+            int count = app.GroupHelper.GetGroupCount();
+            Assert.AreEqual(oldGroupList.Count, count);
+
             oldGroupList[0].Name = group.Name;
             oldGroupList.Sort();
             List<GroupData> newGroupList = app.GroupHelper.GetGroupList();
@@ -94,6 +113,13 @@ namespace addressbooktests
                 data.Header = "222";
                 data.Footer = "333";
                 return data;
+            }
+            foreach(GroupData element in newGroupList)
+            {
+                if (element.Id == oldGroupList[0].Id)
+                {
+                    Assert.AreEqual(element.Name, oldData.Name);
+                }
             }
         }
     }

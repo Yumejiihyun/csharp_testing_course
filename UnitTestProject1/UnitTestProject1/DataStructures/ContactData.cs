@@ -81,7 +81,7 @@ namespace addressbooktests
 
         public override int GetHashCode()
         {
-            return FirstName.GetHashCode();
+            return LastName.GetHashCode() + FirstName.GetHashCode();
         }
 
         public override string ToString()

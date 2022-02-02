@@ -41,27 +41,33 @@ namespace addressbooktests
             }
         }
 
+        private List<ContactData> contactListCash = null;
+
         internal List<ContactData> GetContactList()
         {
-            List<ContactData> contactList = new List<ContactData>();
-            var elements = application.driver.FindElements(By.XPath("//tr[position()>1]"));
-            //*[@id="maintable"]/tbody/tr[1]/th[1]
-            foreach (var element in elements)
+            if (contactListCash is null)
             {
-                var lastName = element.FindElement(By.XPath("td[2]"));
-                var firstName = element.FindElement(By.XPath("td[3]"));
-                contactList.Add(new ContactData(firstName.Text, lastName.Text));
+                contactListCash = new List<ContactData>();
+                var elements = application.driver.FindElements(By.XPath("//tr[position()>1]"));
+                foreach (var element in elements)
+                {
+                    var lastName = element.FindElement(By.XPath("td[2]"));
+                    var firstName = element.FindElement(By.XPath("td[3]"));
+                    contactListCash.Add(new ContactData(firstName.Text, lastName.Text));
+                }
             }
-            return contactList;
+            return contactListCash;
         }
 
         public void ConfirmAddingNewContact()
         {
             application.driver.FindElement(By.CssSelector("input:nth-child(87)")).Click();
+            contactListCash = null;
         }
         public void ConfirmUpdatingContact()
         {
             application.driver.FindElement(By.Name("update")).Click();
+            contactListCash = null;
         }
         public void DeleteContactFromHomePage(int contactNumber)
         {
@@ -69,12 +75,14 @@ namespace addressbooktests
             application.driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             application.driver.SwitchTo().Alert().Accept();
             application.NavigationHelper.GoToHomePage();
+            contactListCash = null;
         }
         public void DeleteContactFromEditPage(int contactNumber)
         {
             application.NavigationHelper.GoToEditContact(contactNumber);
             application.driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             application.NavigationHelper.GoToHomePage();
+            contactListCash = null;
         }
     }
 }
