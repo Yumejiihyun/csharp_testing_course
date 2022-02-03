@@ -24,6 +24,10 @@ namespace addressbooktests
         {
             application.driver.FindElement(By.XPath($"(//img[@alt='Edit'])[{contactNumber}]")).Click();
         }
+        public void GoToGeneralInformation(int contactNumber)
+        {
+            application.driver.FindElements(By.XPath($"(//img[@alt='Details'])"))[contactNumber].Click();
+        }
 
         public void GoToHomePage()
         {
@@ -31,8 +35,8 @@ namespace addressbooktests
             application.driver.Manage().Window.Size = new System.Drawing.Size(1920, 1036);
         }
 
-        internal bool IsGroupPresent() => IsElementPresent(By.XPath($"//div[@id='content']/form/span[1]/input"));
+        public bool IsGroupPresent() => IsElementPresent(By.XPath($"//div[@id='content']/form/span[1]/input"));
 
-        internal bool IsContactPresent() => IsElementPresent(By.XPath($"(//img[@alt='Edit'])[1]"));
+        public bool IsContactPresent() => IsElementPresent(By.XPath($"(//img[@alt='Edit'])[1]"));
     }
 }

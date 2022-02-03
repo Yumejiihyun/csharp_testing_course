@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace addressbooktests
@@ -81,6 +82,34 @@ namespace addressbooktests
             set => emails = value;
         }
         public string[] Bday { get; set; }
+        private int? Age
+        {
+            get
+            {
+                try
+                {
+                    var bMonth = DateTime.ParseExact(Bday[1], "MMMM", new CultureInfo("en-EN", false)).Month;
+                    var today = DateTime.Today;
+                    var age = today.Year - int.Parse(Bday[2]);
+                    if (bMonth > today.Month)
+                    {
+                        age--;
+                    }
+                    else if (bMonth == today.Month)
+                    {
+                        if (int.Parse(Bday[0]) > today.Day)
+                        {
+                            age--;
+                        }
+                    }
+                    return age;
+                }
+                catch(FormatException)
+                {
+                    return null;
+                }
+            }
+        }
 
         public bool Equals(ContactData other)
         {
@@ -117,11 +146,17 @@ namespace addressbooktests
 
         private string CleanUp(string phone)
         {
-            if (phone is null || phone == "")
+            if (phone == "" || phone == "")
             {
-                return "";
+                return null;
             }
             return Regex.Replace(phone, "[ -()]", "") + "\r\n";
+        }
+        internal string ToGeneralInformation()
+        {
+            string bday = Bday is null ? null : $"Birthday {Bday[0]}. {Bday[1]} {Bday[2]} ({Age})";
+            string var = $"{FirstName} {MiddleName} {LastName}{NickName}{Title}{Company}{Address}{Home}{Mobile}{Work}{Email}{Email2}{Email3}{bday}";
+            return var;
         }
     }
 }

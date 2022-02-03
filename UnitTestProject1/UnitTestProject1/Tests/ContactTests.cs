@@ -99,5 +99,14 @@ namespace addressbooktests
             Assert.AreEqual(fromTable.Address, fromEditForm.Address);
             Assert.AreEqual(fromTable.Phones, fromEditForm.Phones);
         }
+        [Test]
+        public void ContactGeneralInformationTest()
+        {
+            ContactData fromEditForm = app.ContactHelper.GetGeneralContactInformationFromEditForm(1);
+            string generalInformationExpected = fromEditForm.ToGeneralInformation();
+            app.NavigationHelper.GoToGeneralInformation(1);
+            string generalInformation = app.ContactHelper.GetGeneralInformation();
+            Assert.AreEqual(generalInformationExpected, generalInformation);
+        }
     }
 }

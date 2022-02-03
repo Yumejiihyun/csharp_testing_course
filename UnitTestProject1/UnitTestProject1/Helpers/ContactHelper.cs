@@ -136,6 +136,67 @@ namespace addressbooktests
                 return application.driver.FindElement(By.Name(name)).GetAttribute("value");
             }
         }
+        internal ContactData GetGeneralContactInformationFromEditForm(int index)
+        {
+            application.NavigationHelper.GoToHomePage();
+            application.NavigationHelper.GoToEditContact(index + 1);
+
+            string firstName = GetValueByName("firstname");
+            string middlename = GetValueByName("middlename");
+            string lastName = GetValueByName("lastname");
+            string nickname = GetValueByName("nickname");
+            string company = GetValueByName("company");
+            string title = GetValueByName("title");
+            string address = GetValueByName("address");
+            string email = GetValueByName("email");
+            string email2 = GetValueByName("email2");
+            string email3 = GetValueByName("email3");
+            string home = GetValueByName("home");
+            string mobilePhone = GetValueByName("mobile");
+            string workPhone = GetValueByName("work");
+            string[] bDay;
+            try
+            {
+                bDay = new string[]
+                {
+                    application.driver.FindElements(By.XPath("//select[@name='bday']/option[@selected and @value!='-']")).FirstOrDefault().GetAttribute("value"),
+                    application.driver.FindElements(By.XPath("//select[@name='bmonth']/option[@selected and @value!='-']")).FirstOrDefault().GetAttribute("value"),
+                    GetValueByName("byear"),
+                };
+            }
+            catch(NullReferenceException)
+            {
+                bDay = null;
+            }
+
+            application.NavigationHelper.GoToHomePage();
+
+            return new ContactData(firstName, middlename, lastName)
+            {
+                NickName = nickname,
+                Company = company,
+                Title = title,
+                Address = address,
+                Email = email,
+                Email2 = email2,
+                Email3 = email3,
+                Home = home,
+                Mobile = mobilePhone,
+                Work = workPhone,
+                Bday = bDay,
+            };
+            string GetValueByName(string name)
+            {
+                return application.driver.FindElement(By.Name(name)).GetAttribute("value");
+            }
+        }
+
+        internal string GetGeneralInformation()
+        {
+            string var = application.driver.FindElement(By.XPath(@"//div[@id='content']")).Text;
+            return var.Replace("\r\n", string.Empty).Replace("H: ", string.Empty).Replace("M: ", string.Empty).Replace("W: ", string.Empty);
+        }
+
         public int GetNumberOfSearchResults()
         {
             application.NavigationHelper.GoToHomePage();
