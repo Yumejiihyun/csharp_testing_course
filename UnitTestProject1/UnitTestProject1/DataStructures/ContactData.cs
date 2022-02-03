@@ -1,60 +1,86 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace addressbooktests
 {
     public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
-        private string firstName;
-        private string middleName;
-        private string lastName;
-        private string nickName;
-        private string title;
-        private string company;
-        private string address;
-        private string home;
-        private string mobile;
-        private string email;
-        private string[] bday;
+        private string phones;
+        private string emails;
 
         public ContactData(string nickName)
         {
-            this.nickName = nickName;
+            this.NickName = nickName;
 
-            firstName = string.Empty;
-            middleName = string.Empty;
-            lastName = string.Empty;
-            title = string.Empty;
-            company = string.Empty;
-            address = string.Empty;
-            home = string.Empty;
-            mobile = string.Empty;
-            email = string.Empty;
+            FirstName = string.Empty;
+            MiddleName = string.Empty;
+            LastName = string.Empty;
+            Title = string.Empty;
+            Company = string.Empty;
+            Address = string.Empty;
+            Home = string.Empty;
+            Mobile = string.Empty;
+            Email = string.Empty;
         }
 
         public ContactData(string firstName, string lastName)
         {
-            this.firstName = firstName;
-            this.lastName = lastName;
+            this.FirstName = firstName;
+            this.LastName = lastName;
         }
 
         public ContactData(string firstName, string middleName, string lastName)
         {
-            this.firstName = firstName;
-            this.middleName = middleName;
-            this.lastName = lastName;
+            this.FirstName = firstName;
+            this.MiddleName = middleName;
+            this.LastName = lastName;
         }
 
-        public string FirstName { get => firstName; set => firstName = value; }
-        public string MiddleName { get => middleName; set => middleName = value; }
-        public string LastName { get => lastName; set => lastName = value; }
-        public string NickName { get => nickName; set => nickName = value; }
-        public string Title { get => title; set => title = value; }
-        public string Company { get => company; set => company = value; }
-        public string Address { get => address; set => address = value; }
-        public string Home { get => home; set => home = value; }
-        public string Mobile { get => mobile; set => mobile = value; }
-        public string Email { get => email; set => email = value; }
-        public string[] Bday { get => bday; set => bday = value; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string NickName { get; set; }
+        public string Title { get; set; }
+        public string Company { get; set; }
+        public string Address { get; set; }
+        public string Home { get; set; }
+        public string Mobile { get; set; }
+        public string Work { get; set; }
+        public string Phones
+        {
+            get
+            {
+                if (phones != null)
+                {
+                    return phones;
+                }
+                else
+                {
+                    return (CleanUp(Home) + CleanUp(Mobile) + CleanUp(Work)).Trim();
+                }
+            }
+            set => phones = value;
+        }
+
+        public string Email { get; set; }
+        public string Email2 { get; set; }
+        public string Email3 { get; set; }
+        public string Emails
+        {
+            get
+            {
+                if (emails != null)
+                {
+                    return emails;
+                }
+                else
+                {
+                    return (CleanUp(Email) + CleanUp(Email2) + CleanUp(Email3)).Trim();
+                }
+            }
+            set => emails = value;
+        }
+        public string[] Bday { get; set; }
 
         public bool Equals(ContactData other)
         {
@@ -66,8 +92,8 @@ namespace addressbooktests
             {
                 return true;
             }
-            return firstName == other.firstName
-                   && lastName == other.lastName;
+            return FirstName == other.FirstName
+                   && LastName == other.LastName;
         }
 
         public int CompareTo(ContactData other)
@@ -87,6 +113,15 @@ namespace addressbooktests
         public override string ToString()
         {
             return "Last Name = " + LastName + "\nFirst Name = " + FirstName;
+        }
+
+        private string CleanUp(string phone)
+        {
+            if (phone is null || phone == "")
+            {
+                return "";
+            }
+            return Regex.Replace(phone, "[ -()]", "") + "\r\n";
         }
     }
 }

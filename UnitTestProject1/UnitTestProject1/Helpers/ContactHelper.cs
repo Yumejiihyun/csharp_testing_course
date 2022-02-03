@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using OpenQA.Selenium;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace addressbooktests
 {
@@ -82,6 +83,65 @@ namespace addressbooktests
             application.driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             application.NavigationHelper.GoToHomePage();
             contactListCash = null;
+        }
+
+        internal ContactData GetContactInformationFromTable(int index)
+        {
+            application.NavigationHelper.GoToHomePage();
+
+            IList<IWebElement> cells = application.driver.FindElements(By.Name("entry"))[index]
+                .FindElements(By.TagName("td"));
+            string lastName = cells[1].Text;
+            string firstName = cells[2].Text;
+            string address = cells[3].Text;
+            string allEmails = cells[4].Text;
+            string allPhones = cells[5].Text;
+            return new ContactData(firstName, lastName)
+            {
+                Address = address,
+                Emails = allEmails,
+                Phones = allPhones,
+            };
+        }
+
+        internal ContactData GetContactInformationFromEditForm(int index)
+        {
+            application.NavigationHelper.GoToHomePage();
+            application.NavigationHelper.GoToEditContact(index + 1);
+
+            string firstName = GetValueByName("firstname");
+            string lastName= GetValueByName("lastname");
+            string address = GetValueByName("address");
+            string email = GetValueByName("email");
+            string email2 = GetValueByName("email2");
+            string email3 = GetValueByName("email3");
+            string home = GetValueByName("home");
+            string mobilePhone = GetValueByName("mobile");
+            string workPhone = GetValueByName("work");
+
+            application.NavigationHelper.GoToHomePage();
+
+            return new ContactData(firstName, lastName)
+            {
+                Address = address,
+                Email = email,
+                Email2 = email2,
+                Email3 = email3,
+                Home = home,
+                Mobile = mobilePhone,
+                Work = workPhone,
+            };
+            string GetValueByName(string name)
+            {
+                return application.driver.FindElement(By.Name(name)).GetAttribute("value");
+            }
+        }
+        public int GetNumberOfSearchResults()
+        {
+            application.NavigationHelper.GoToHomePage();
+            string searchText = application.driver.FindElement(By.TagName("label")).Text;
+            Match m = new Regex(@"\d+").Match(searchText);
+            return Int32.Parse(m.Value);
         }
     }
 }

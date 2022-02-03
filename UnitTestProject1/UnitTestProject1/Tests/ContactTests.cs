@@ -32,7 +32,7 @@ namespace addressbooktests
                     Title = "Software Engineer",
                     Company = "Emerson",
                     Address = "St. Petersburg",
-                    Home = "St. Petersburg",
+                    Home = "666666",
                     Mobile = "777777",
                     Email = "Ivanov@mail.ru",
                     Bday = new string[] { "7", "July", "1907" }
@@ -89,6 +89,15 @@ namespace addressbooktests
             List<ContactData> newContacts = app.ContactHelper.GetContactList();
             oldContacts.RemoveAt(0);
             Assert.AreEqual(oldContacts, newContacts);
+        }
+        [Test]
+        public void ContactInformationTest()
+        {
+            ContactData fromTable = app.ContactHelper.GetContactInformationFromTable(0);
+            ContactData fromEditForm = app.ContactHelper.GetContactInformationFromEditForm(0);
+            Assert.AreEqual(fromTable, fromEditForm);
+            Assert.AreEqual(fromTable.Address, fromEditForm.Address);
+            Assert.AreEqual(fromTable.Phones, fromEditForm.Phones);
         }
     }
 }

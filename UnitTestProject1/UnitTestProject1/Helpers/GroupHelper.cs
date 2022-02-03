@@ -38,10 +38,25 @@ namespace addressbooktests
                 foreach(var element in elements)
                 {
                     var id = element.FindElement(By.TagName("input")).GetAttribute("value");
-                    groupListCash.Add(new GroupData(element.Text)
+                    groupListCash.Add(new GroupData(null)
                     {
                         Id = id,
                     });
+                }
+
+                string allGroupNames = application.driver.FindElement(By.CssSelector("div#content form")).Text;
+                string[] parts = allGroupNames.Split('\n');
+                int shift = groupListCash.Count - parts.Length;
+                for (int i = 0; i < groupListCash.Count; i++)
+                {
+                    if (i < shift)
+                    {
+                        groupListCash[i].Name = "";
+                    }
+                    else
+                    { 
+                        groupListCash[i].Name = parts[i].Trim();
+                    }
                 }
             }
             return new List<GroupData>(groupListCash);
