@@ -1,11 +1,49 @@
 ﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace addressbooktests
 {
     [TestFixture]
     public class ContactTests : TestBase
-    {       
+    {
+        public static IEnumerable<ContactData> RandomContactDataProvider()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+            for (int i = 0; i < 5; i++)
+            {
+                contacts.Add(new ContactData(GenerateRandomString(30))
+                {
+                    FirstName = GenerateRandomString(100),
+                    MiddleName = GenerateRandomString(100),
+                    LastName = GenerateRandomString(100),
+                    Title = GenerateRandomString(100),
+                    Company = GenerateRandomString(100),
+                    Address = GenerateRandomString(100),
+                    Home = GenerateRandomIntString(10000),
+                    Mobile = GenerateRandomIntString(10000),
+                    Email = GenerateRandomString(100),
+                });
+            }
+            return contacts;
+        }
+
+        [Test, TestCaseSource("RandomContactDataProvider")]
+        public void NewRandomContactTest(ContactData contact)
+        {
+            List<ContactData> oldContacts = app.ContactHelper.GetContactList();
+            app.NavigationHelper.GoToNewContact();
+            app.ContactHelper.FillContactForm(contact);
+            app.ContactHelper.ConfirmAddingNewContact();
+            app.NavigationHelper.GoToHomePage();
+
+            oldContacts.Add(contact);
+            List<ContactData> newContacts = app.ContactHelper.GetContactList();
+            oldContacts.Sort();
+            newContacts.Sort();
+            Assert.AreEqual(oldContacts, newContacts);
+        }
+
         [Test]
         public void NewContactTest()
         {
