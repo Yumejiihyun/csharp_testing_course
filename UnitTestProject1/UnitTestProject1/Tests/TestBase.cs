@@ -9,18 +9,18 @@ namespace addressbooktests
         protected ApplicationManager app;
         private static readonly Random rnd = new Random();
 
-        protected static string GenerateRandomString(int max)
+        public static string GenerateRandomString(int max)
         {
             int l = Convert.ToInt32(rnd.NextDouble() * max);
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < l; i++)
             {
-                builder.Append(Convert.ToChar(32 + Convert.ToInt32(rnd.NextDouble() * 223)));
+                builder.Append(Convert.ToChar(32 + Convert.ToInt32(rnd.NextDouble() * 65)));
             }
             return builder.ToString();
         }
 
-        protected static string GenerateRandomIntString(int max)
+        public static string GenerateRandomIntString(int max)
         {
             return rnd.Next(max).ToString();
         }

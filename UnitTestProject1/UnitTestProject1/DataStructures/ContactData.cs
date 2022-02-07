@@ -8,7 +8,10 @@ namespace addressbooktests
     {
         private string phones;
         private string emails;
+        public ContactData()
+        {
 
+        }
         public ContactData(string nickName)
         {
             this.NickName = nickName;
@@ -147,7 +150,7 @@ namespace addressbooktests
 
         private string CleanUp(string phone)
         {
-            if (phone == "" || phone == "")
+            if (phone == "" || phone is null)
             {
                 return null;
             }

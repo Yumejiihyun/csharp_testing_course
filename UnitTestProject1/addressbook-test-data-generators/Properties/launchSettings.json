@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "addressbook-test-data-generators": {
+      "commandName": "Project",
+      "commandLineArgs": "contact 2 contacts.xml xml"
+    }
+  }
+}
