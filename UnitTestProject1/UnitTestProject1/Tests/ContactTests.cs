@@ -136,6 +136,7 @@ namespace addressbooktests
             Assert.AreEqual(fromTable, fromEditForm);
             Assert.AreEqual(fromTable.Address, fromEditForm.Address);
             Assert.AreEqual(fromTable.Phones, fromEditForm.Phones);
+            Assert.AreEqual(fromTable.Emails, fromEditForm.Emails);
         }
         [Test]
         public void ContactGeneralInformationTest()

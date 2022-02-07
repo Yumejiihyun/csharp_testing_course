@@ -131,7 +131,8 @@ namespace addressbooktests
             {
                 return 1;
             }
-            return LastName.CompareTo(other.LastName);
+            return LastName.CompareTo(other.LastName)
+                + FirstName.CompareTo(other.FirstName);
         }
 
         public override int GetHashCode()
@@ -154,9 +155,11 @@ namespace addressbooktests
         }
         internal string ToGeneralInformation()
         {
+            string fullName = $"{FirstName} {MiddleName} {LastName}";
+            fullName.Trim();
+            fullName.Replace("  ", " ");
             string bday = Bday is null ? null : $"Birthday {Bday[0]}. {Bday[1]} {Bday[2]} ({Age})";
-            string var = $"{FirstName} {MiddleName} {LastName}{NickName}{Title}{Company}{Address}{Home}{Mobile}{Work}{Email}{Email2}{Email3}{bday}";
-            return var;
+            return $"{FirstName} {MiddleName} {LastName}{NickName}{Title}{Company}{Address}{Home}{Mobile}{Work}{Email}{Email2}{Email3}{bday}";
         }
     }
 }
