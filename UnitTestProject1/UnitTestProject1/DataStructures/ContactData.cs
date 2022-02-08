@@ -14,7 +14,7 @@ namespace addressbooktests
         }
         public ContactData(string nickName)
         {
-            this.NickName = nickName;
+            NickName = nickName;
 
             FirstName = string.Empty;
             MiddleName = string.Empty;
@@ -29,15 +29,15 @@ namespace addressbooktests
 
         public ContactData(string firstName, string lastName)
         {
-            this.FirstName = firstName;
-            this.LastName = lastName;
+            FirstName = firstName;
+            LastName = lastName;
         }
 
         public ContactData(string firstName, string middleName, string lastName)
         {
-            this.FirstName = firstName;
-            this.MiddleName = middleName;
-            this.LastName = lastName;
+            FirstName = firstName;
+            MiddleName = middleName;
+            LastName = lastName;
         }
 
         public string FirstName { get; set; }
@@ -134,8 +134,12 @@ namespace addressbooktests
             {
                 return 1;
             }
-            return LastName.CompareTo(other.LastName)
-                + FirstName.CompareTo(other.FirstName);
+            int result = LastName.CompareTo(other.LastName);
+            if (result == 0)
+            {
+                result = FirstName.CompareTo(other.FirstName);
+            }
+            return result;
         }
 
         public override int GetHashCode()
