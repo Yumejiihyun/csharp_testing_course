@@ -12,7 +12,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 namespace addressbooktests
 {
     [TestFixture]
-    public class GroupTests : TestBase
+    public class GroupTests : GroupTestBase
     {
         public static IEnumerable<GroupData> RandomGroupDataProvider()
         {
@@ -83,7 +83,7 @@ namespace addressbooktests
         public void NewGroupTest(GroupData group)
         {
             app.NavigationHelper.GoToGroupsPage();
-            List<GroupData> oldGroupList = app.GroupHelper.GetGroupList();
+            List<GroupData> oldGroupList = GroupData.GetAll();
             app.GroupHelper.CreateNewGroup(group);
             app.NavigationHelper.GoToGroupsPage();
 
@@ -91,7 +91,7 @@ namespace addressbooktests
             Assert.AreEqual(oldGroupList.Count + 1, count);
 
             oldGroupList.Add(group);
-            List<GroupData> newGroupList = app.GroupHelper.GetGroupList();
+            List<GroupData> newGroupList = GroupData.GetAll();
             newGroupList.Sort();
             oldGroupList.Sort();
             Assert.AreEqual(oldGroupList, newGroupList);
@@ -100,7 +100,7 @@ namespace addressbooktests
         public void NewInvalidGroupTest()
         {
             app.NavigationHelper.GoToGroupsPage();
-            List<GroupData> oldGroupList = app.GroupHelper.GetGroupList();
+            List<GroupData> oldGroupList = GroupData.GetAll();
             GroupData group = Create();
             app.GroupHelper.CreateNewGroup(group);
             app.NavigationHelper.GoToGroupsPage();
@@ -108,7 +108,7 @@ namespace addressbooktests
             int count = app.GroupHelper.GetGroupCount();
             Assert.AreEqual(oldGroupList.Count, count);
 
-            List<GroupData> newGroupList = app.GroupHelper.GetGroupList();
+            List<GroupData> newGroupList = GroupData.GetAll();
             Assert.AreEqual(oldGroupList, newGroupList);
 
             GroupData Create()
@@ -130,18 +130,19 @@ namespace addressbooktests
                 app.GroupHelper.CreateNewGroup(new GroupData(null));
                 app.NavigationHelper.GoToGroupsPage();
             }
-            List<GroupData> oldGroupList = app.GroupHelper.GetGroupList();
-            app.GroupHelper.RemoveGroup(1);
+            List<GroupData> oldGroupList = GroupData.GetAll();
+            GroupData toBeRemoved = oldGroupList[0];
+            app.GroupHelper.RemoveGroup(oldGroupList[0]);
             app.NavigationHelper.GoToGroupsPage();
 
             int count = app.GroupHelper.GetGroupCount();
             Assert.AreEqual(oldGroupList.Count - 1, count);
 
-            List<GroupData> newGroupList = app.GroupHelper.GetGroupList();
+            List<GroupData> newGroupList = GroupData.GetAll();
 
             foreach (GroupData group in newGroupList)
             {
-                Assert.AreNotEqual(group.Id, oldGroupList[0].Id);
+                Assert.AreNotEqual(group.Id, toBeRemoved.Id);
             }
 
             oldGroupList.RemoveAt(0);
@@ -156,7 +157,7 @@ namespace addressbooktests
                 app.GroupHelper.CreateNewGroup(new GroupData(null));
                 app.NavigationHelper.GoToGroupsPage();
             }
-            List<GroupData> oldGroupList = app.GroupHelper.GetGroupList();
+            List<GroupData> oldGroupList = GroupData.GetAll();
             GroupData oldData = oldGroupList[0];
             GroupData group = Create();
             app.GroupHelper.EditGroup(1, group);
@@ -167,7 +168,7 @@ namespace addressbooktests
 
             oldGroupList[0].Name = group.Name;
             oldGroupList.Sort();
-            List<GroupData> newGroupList = app.GroupHelper.GetGroupList();
+            List<GroupData> newGroupList = GroupData.GetAll();
             newGroupList.Sort();
             Assert.AreEqual(oldGroupList, newGroupList);
 

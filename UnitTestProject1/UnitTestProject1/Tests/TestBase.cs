@@ -6,6 +6,7 @@ namespace addressbooktests
 {
     public class TestBase
     {
+        public static bool PERFOM_LONG_UI_CHECKS = true;
         protected ApplicationManager app;
         private static readonly Random rnd = new Random();
 
@@ -42,6 +43,23 @@ namespace addressbooktests
         public override void SetUp()
         {
             app = ApplicationManager.GetInstance();
+        }
+    }
+
+    public class GroupTestBase : TestBase
+    {
+        [TearDown]
+        public void CompareGroupsUi_Db()
+        {
+            if (PERFOM_LONG_UI_CHECKS)
+            {
+                app.NavigationHelper.GoToGroupsPage();
+                var fromDb = GroupData.GetAll();
+                var fromUi = app.GroupHelper.GetGroupList();
+                fromDb.Sort();
+                fromUi.Sort();
+                Assert.AreEqual(fromUi, fromDb);
+            }
         }
     }
 }

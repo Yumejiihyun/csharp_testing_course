@@ -24,6 +24,10 @@ namespace addressbooktests
         {
             application.driver.FindElement(By.XPath($"(//img[@alt='Edit'])[{contactNumber}]")).Click();
         }
+        public void GoToEditContact(ContactData contact)
+        {
+            application.driver.FindElement(By.XPath($"//input[@id='{contact.Id}']/../../td[8]/*/img[@alt='Edit']")).Click();
+        }
         public void GoToGeneralInformation(int contactNumber)
         {
             application.driver.FindElements(By.XPath($"(//img[@alt='Details'])"))[contactNumber].Click();

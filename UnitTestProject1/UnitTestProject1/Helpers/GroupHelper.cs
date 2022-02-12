@@ -68,6 +68,12 @@ namespace addressbooktests
             application.driver.FindElement(By.Name("delete")).Click();
             groupListCash = null;
         }
+        internal void RemoveGroup(GroupData groupData)
+        {
+            application.driver.FindElement(By.XPath($"//input[@name='selected[]' and @value='{groupData.Id}']")).Click();
+            application.driver.FindElement(By.Name("delete")).Click();
+            groupListCash = null;
+        }
         private void SubmitGroupForm()
         {
             application.driver.FindElement(By.Name("submit")).Click();

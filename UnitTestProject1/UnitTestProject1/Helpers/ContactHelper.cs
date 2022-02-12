@@ -1,6 +1,7 @@
-﻿using System;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using System;
 using System.Collections.Generic;
-using OpenQA.Selenium;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -43,6 +44,17 @@ namespace addressbooktests
             }
         }
 
+        internal void AddContactToGroup(ContactData contact, GroupData group)
+        {
+            application.NavigationHelper.GoToHomePage();
+            new SelectElement(application.driver.FindElement(By.Name("group"))).SelectByText("[all]");
+            application.driver.FindElement(By.Id($"{contact.Id}")).Click();
+            new SelectElement(application.driver.FindElement(By.Name("to_group"))).SelectByText(group.Name);
+            application.driver.FindElement(By.Name("add")).Click();
+            new WebDriverWait(application.driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+        }
+
         private List<ContactData> contactListCash = null;
 
         internal List<ContactData> GetContactList()
@@ -77,9 +89,27 @@ namespace addressbooktests
             application.NavigationHelper.GoToHomePage();
             contactListCash = null;
         }
+
+        public void DeleteContactFromHomePage(ContactData toBeRemoved)
+        {
+            application.driver.FindElement(By.XPath($"//input[@id='{toBeRemoved.Id}']")).Click();
+            application.driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            application.driver.SwitchTo().Alert().Accept();
+            application.NavigationHelper.GoToHomePage();
+            contactListCash = null;
+        }
+
         public void DeleteContactFromEditPage(int contactNumber)
         {
             application.NavigationHelper.GoToEditContact(contactNumber);
+            application.driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            application.NavigationHelper.GoToHomePage();
+            contactListCash = null;
+        }
+
+        internal void DeleteContactFromEditPage(ContactData toBeRemoved)
+        {
+            application.NavigationHelper.GoToEditContact(toBeRemoved);
             application.driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             application.NavigationHelper.GoToHomePage();
             contactListCash = null;
@@ -110,7 +140,7 @@ namespace addressbooktests
             application.NavigationHelper.GoToEditContact(index + 1);
 
             string firstName = GetValueByName("firstname");
-            string lastName= GetValueByName("lastname");
+            string lastName = GetValueByName("lastname");
             string address = GetValueByName("address");
             string email = GetValueByName("email");
             string email2 = GetValueByName("email2");
@@ -164,7 +194,7 @@ namespace addressbooktests
                     GetValueByName("byear"),
                 };
             }
-            catch(NullReferenceException)
+            catch (NullReferenceException)
             {
                 bDay = null;
             }

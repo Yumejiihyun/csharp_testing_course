@@ -47,14 +47,14 @@ namespace addressbooktests
         [Test, TestCaseSource("ContactDataFromJsonFile")]
         public void NewContactTest(ContactData contact)
         {
-            List<ContactData> oldContacts = app.ContactHelper.GetContactList();
+            List<ContactData> oldContacts = ContactData.GetAll();
             app.NavigationHelper.GoToNewContact();
             app.ContactHelper.FillContactForm(contact);
             app.ContactHelper.ConfirmAddingNewContact();
             app.NavigationHelper.GoToHomePage();
 
             oldContacts.Add(contact);
-            List<ContactData> newContacts = app.ContactHelper.GetContactList();
+            List<ContactData> newContacts = ContactData.GetAll();
             oldContacts.Sort();
             newContacts.Sort();
             Assert.AreEqual(oldContacts, newContacts);
@@ -63,7 +63,7 @@ namespace addressbooktests
         [Test]
         public void NewContactTest()
         {
-            List<ContactData> oldContacts = app.ContactHelper.GetContactList();
+            List<ContactData> oldContacts = ContactData.GetAll();
             app.NavigationHelper.GoToNewContact();
             ContactData vanya = CreateVanya777();
             app.ContactHelper.FillContactForm(vanya);
@@ -71,7 +71,7 @@ namespace addressbooktests
             app.NavigationHelper.GoToHomePage();
 
             oldContacts.Add(vanya);
-            List<ContactData> newContacts = app.ContactHelper.GetContactList();
+            List<ContactData> newContacts = ContactData.GetAll();
             oldContacts.Sort();
             newContacts.Sort();
             Assert.AreEqual(oldContacts, newContacts);
@@ -103,7 +103,7 @@ namespace addressbooktests
                 app.ContactHelper.ConfirmAddingNewContact();
                 app.NavigationHelper.GoToHomePage();
             }
-            List<ContactData> oldContacts = app.ContactHelper.GetContactList();
+            List<ContactData> oldContacts = ContactData.GetAll();
             app.NavigationHelper.GoToEditContact(1);
             var editedContact = new ContactData("Barantsev");
             oldContacts[0] = editedContact;
@@ -111,7 +111,7 @@ namespace addressbooktests
             app.ContactHelper.ConfirmUpdatingContact();
             app.NavigationHelper.GoToHomePage();
 
-            List<ContactData> newContacts = app.ContactHelper.GetContactList();
+            List<ContactData> newContacts = ContactData.GetAll();
             Assert.AreEqual(oldContacts, newContacts);
         }
         [Test]
@@ -123,9 +123,10 @@ namespace addressbooktests
                 app.ContactHelper.ConfirmAddingNewContact();
                 app.NavigationHelper.GoToHomePage();
             }
-            List<ContactData> oldContacts = app.ContactHelper.GetContactList();
-            app.ContactHelper.DeleteContactFromHomePage(1);
-            List<ContactData> newContacts = app.ContactHelper.GetContactList();
+            List<ContactData> oldContacts = ContactData.GetAll();
+            var toBeRemoved = oldContacts[0];
+            app.ContactHelper.DeleteContactFromHomePage(toBeRemoved);
+            List<ContactData> newContacts = ContactData.GetAll();
             oldContacts.RemoveAt(0);
             Assert.AreEqual(oldContacts, newContacts);
         }
@@ -138,9 +139,10 @@ namespace addressbooktests
                 app.ContactHelper.ConfirmAddingNewContact();
                 app.NavigationHelper.GoToHomePage();
             }
-            List<ContactData> oldContacts = app.ContactHelper.GetContactList();
-            app.ContactHelper.DeleteContactFromEditPage(1);
-            List<ContactData> newContacts = app.ContactHelper.GetContactList();
+            List<ContactData> oldContacts = ContactData.GetAll();
+            var toBeRemoved = oldContacts[0];
+            app.ContactHelper.DeleteContactFromEditPage(toBeRemoved);
+            List<ContactData> newContacts = ContactData.GetAll();
             oldContacts.RemoveAt(0);
             Assert.AreEqual(oldContacts, newContacts);
         }

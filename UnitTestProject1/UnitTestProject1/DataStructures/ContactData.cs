@@ -1,13 +1,18 @@
-﻿using System;
+﻿using LinqToDB.Mapping;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace addressbooktests
 {
+    [Table(Name = "addressbook")]
     public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
         private string phones;
         private string emails;
+
         public ContactData()
         {
 
@@ -39,10 +44,15 @@ namespace addressbooktests
             MiddleName = middleName;
             LastName = lastName;
         }
-
+        [Column(Name = "id"), PrimaryKey]
+        public string Id { get; set; }
+        [Column(Name = "firstname")]
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
+        [Column(Name = "lastname")]
         public string LastName { get; set; }
+        [Column(Name ="deprecated")]
+        public string Depricated { get; }
         public string NickName { get; set; }
         public string Title { get; set; }
         public string Company { get; set; }
@@ -107,7 +117,7 @@ namespace addressbooktests
                     }
                     return age;
                 }
-                catch(FormatException)
+                catch (FormatException)
                 {
                     return null;
                 }
@@ -124,8 +134,11 @@ namespace addressbooktests
             {
                 return true;
             }
-            return FirstName == other.FirstName
-                   && LastName == other.LastName;
+            if (Id == other.Id)
+            { 
+                return true;
+            }
+            return LastName == other.LastName && FirstName == other.FirstName;
         }
 
         public int CompareTo(ContactData other)
@@ -167,6 +180,16 @@ namespace addressbooktests
             fullName.Replace("  ", " ");
             string bday = Bday is null ? null : $"Birthday {Bday[0]}. {Bday[1]} {Bday[2]} ({Age})";
             return $"{FirstName} {MiddleName} {LastName}{NickName}{Title}{Company}{Address}{Home}{Mobile}{Work}{Email}{Email2}{Email3}{bday}";
+        }
+
+        public static List<ContactData> GetAll()
+        {
+            using (AddressBookDB db = new AddressBookDB())
+            {
+                return (from c in db.Contacts
+                        where c.Depricated == "0000-00-00 00:00:00"
+                        select c).ToList();
+            }
         }
     }
 }
