@@ -55,6 +55,16 @@ namespace addressbooktests
                 .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
         }
 
+        internal void RemoveContactFromGroup(ContactData contact, GroupData group)
+        {
+            application.NavigationHelper.GoToHomePage();
+            new SelectElement(application.driver.FindElement(By.Name("group"))).SelectByText($"{group.Name}");
+            application.driver.FindElement(By.Id($"{contact.Id}")).Click();
+            application.driver.FindElement(By.Name("remove")).Click();
+            new WebDriverWait(application.driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+        }
+
         private List<ContactData> contactListCash = null;
 
         internal List<ContactData> GetContactList()
