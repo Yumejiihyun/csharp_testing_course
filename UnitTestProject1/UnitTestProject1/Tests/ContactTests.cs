@@ -104,7 +104,8 @@ namespace addressbooktests
                 app.NavigationHelper.GoToHomePage();
             }
             List<ContactData> oldContacts = ContactData.GetAll();
-            app.NavigationHelper.GoToEditContact(1);
+            var toBeEdited = oldContacts[0];
+            app.NavigationHelper.GoToEditContact(toBeEdited);
             var editedContact = new ContactData("Barantsev");
             oldContacts[0] = editedContact;
             app.ContactHelper.FillContactForm(editedContact);
