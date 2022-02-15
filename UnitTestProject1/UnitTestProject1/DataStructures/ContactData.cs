@@ -176,10 +176,10 @@ namespace addressbooktests
         internal string ToGeneralInformation()
         {
             string fullName = $"{FirstName} {MiddleName} {LastName}";
-            fullName.Trim();
-            fullName.Replace("  ", " ");
+            fullName = fullName.Trim();
+            fullName = fullName.Replace("  ", " ");
             string bday = Bday is null ? null : $"Birthday {Bday[0]}. {Bday[1]} {Bday[2]} ({Age})";
-            return $"{FirstName} {MiddleName} {LastName}{NickName}{Title}{Company}{Address}{Home}{Mobile}{Work}{Email}{Email2}{Email3}{bday}";
+            return $"{fullName}{NickName}{Title}{Company}{Address}{Home}{Mobile}{Work}{Email}{Email2}{Email3}{bday}";
         }
 
         public static List<ContactData> GetAll()

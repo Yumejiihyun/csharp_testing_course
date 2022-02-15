@@ -160,9 +160,9 @@ namespace addressbooktests
         [Test]
         public void ContactGeneralInformationTest()
         {
-            ContactData fromEditForm = app.ContactHelper.GetGeneralContactInformationFromEditForm(1);
+            ContactData fromEditForm = app.ContactHelper.GetGeneralContactInformationFromEditForm(0);
             string generalInformationExpected = fromEditForm.ToGeneralInformation();
-            app.NavigationHelper.GoToGeneralInformation(1);
+            app.NavigationHelper.GoToGeneralInformation(0);
             string generalInformation = app.ContactHelper.GetGeneralInformation();
             Assert.AreEqual(generalInformationExpected, generalInformation);
         }
