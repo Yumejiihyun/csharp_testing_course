@@ -9,7 +9,8 @@ namespace addressbooktests
         [Test]
         public void AddingContactToGroupTest()
         {
-            GroupData group = GroupData.GetAll()[0];
+            var groups = GroupData.GetAll();
+            GroupData group = ContactToGroupChecks(groups, "AddingContactToGroupTest");
             List<ContactData> oldList = group.GetContacts();
             ContactData contact = ContactData.GetAll().Except(oldList).First();
 
@@ -26,9 +27,10 @@ namespace addressbooktests
         [Test]
         public void RemoveContactFromGroupTest()
         {
-            GroupData group = GroupData.GetAll()[0];
+            var groups = GroupData.GetAll();
+            GroupData group = ContactToGroupChecks(groups, "RemoveContactFromGroupTest");
             List<ContactData> oldList = group.GetContacts();
-            if(oldList.Count == 0)
+            if (oldList.Count == 0)
             {
                 var contactToAdd = ContactData.GetAll().First();
                 app.ContactHelper.AddContactToGroup(contactToAdd, group);
@@ -45,6 +47,26 @@ namespace addressbooktests
             oldList.Sort();
 
             Assert.AreEqual(oldList, newList);
+        }
+
+        private GroupData ContactToGroupChecks(List<GroupData> groups, string newGroupName)
+        {
+            GroupData group;
+            if (!app.NavigationHelper.IsContactPresent())
+            {
+                app.NavigationHelper.GoToNewContact();
+                app.ContactHelper.ConfirmAddingNewContact();
+                app.NavigationHelper.GoToHomePage();
+            }
+            if (groups.Count == 0)
+            {
+                app.NavigationHelper.GoToGroupsPage();
+                app.GroupHelper.CreateNewGroup(group = new GroupData(newGroupName));
+                app.NavigationHelper.GoToHomePage();
+                return group;
+            }
+
+            return groups[0];
         }
     }
 }
