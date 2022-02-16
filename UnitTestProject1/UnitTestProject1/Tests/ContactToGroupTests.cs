@@ -7,12 +7,17 @@ namespace addressbooktests
     public class ContactToGroupTests : TestBase
     {
         [Test]
-        public void AddingContactToGroupTest()
+        public void AddContactToGroupTest()
         {
             var groups = GroupData.GetAll();
-            GroupData group = ContactToGroupChecks(groups, "AddingContactToGroupTest");
+            GroupData group = ContactsAndGroupsChecksForEmtyness(groups, "AddingContactToGroupTest");
             List<ContactData> oldList = group.GetContacts();
-            ContactData contact = ContactData.GetAll().Except(oldList).First();
+            ContactData contact = ContactData.GetAll().Except(oldList).FirstOrDefault();
+            if (contact is null)
+            {
+                oldList = ContactToGroupChecks(group, app.ContactHelper.RemoveContactFromGroup);
+                contact = ContactData.GetAll().Except(oldList).First();
+            }
 
             app.ContactHelper.AddContactToGroup(contact, group);
 
@@ -24,18 +29,27 @@ namespace addressbooktests
             Assert.AreEqual(oldList, newList);
         }
 
+        private delegate void Del(ContactData contactData, GroupData groupData);
+
+        private List<ContactData> ContactToGroupChecks(GroupData group, Del razraz)
+        {
+            List<ContactData> oldList;
+            var contactToRemove = ContactData.GetAll().First();
+            razraz(contactToRemove, group);
+            oldList = group.GetContacts();
+            app.NavigationHelper.GoToHomePage();
+            return oldList;
+        }
+
         [Test]
         public void RemoveContactFromGroupTest()
         {
             var groups = GroupData.GetAll();
-            GroupData group = ContactToGroupChecks(groups, "RemoveContactFromGroupTest");
+            GroupData group = ContactsAndGroupsChecksForEmtyness(groups, "RemoveContactFromGroupTest");
             List<ContactData> oldList = group.GetContacts();
             if (oldList.Count == 0)
             {
-                var contactToAdd = ContactData.GetAll().First();
-                app.ContactHelper.AddContactToGroup(contactToAdd, group);
-                oldList = group.GetContacts();
-                app.NavigationHelper.GoToHomePage();
+                oldList = ContactToGroupChecks(group, app.ContactHelper.AddContactToGroup);
             }
             ContactData contact = oldList[0];
 
@@ -49,7 +63,7 @@ namespace addressbooktests
             Assert.AreEqual(oldList, newList);
         }
 
-        private GroupData ContactToGroupChecks(List<GroupData> groups, string newGroupName)
+        private GroupData ContactsAndGroupsChecksForEmtyness(List<GroupData> groups, string newGroupName)
         {
             GroupData group;
             if (!app.NavigationHelper.IsContactPresent())
